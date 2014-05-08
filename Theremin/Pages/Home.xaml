@@ -9,7 +9,8 @@
     <Grid Style="{StaticResource ContentRoot}">
         <ScrollViewer>
             <StackPanel MinWidth="200">
-                <TextBlock Text="TODO: add content" />
+                <TextBlock Text="LeapMotion Frame Rate:" />
+                <TextBlock Text="{Binding Path=FrameRate}" />
             </StackPanel>
         </ScrollViewer>
     </Grid>

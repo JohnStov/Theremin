@@ -10,6 +10,8 @@ namespace Theremin.Pages
         public Home()
         {
             InitializeComponent();
+
+            DataContext = new HomeViewModel();
         }
     }
 }
