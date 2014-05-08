@@ -15,6 +15,8 @@ namespace Theremin.Pages
             {
                 var span = f[1].Timestamp - f[0].Timestamp;
                 FrameRate = 1.0/span.TotalSeconds;
+
+                Hands = f[0].Value.Hands.Count;
             });
         }
 
@@ -23,6 +25,13 @@ namespace Theremin.Pages
         { 
             get { return frameRate; } 
             private set { this.RaiseAndSetIfChanged(ref frameRate, value); } 
+        }
+
+        private int hands;
+        public int Hands
+        {
+            get { return hands; }
+            private set { this.RaiseAndSetIfChanged(ref hands, value); }
         }
     }
 }

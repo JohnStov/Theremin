@@ -11,6 +11,8 @@
             <StackPanel MinWidth="200">
                 <TextBlock Text="LeapMotion Frame Rate:" />
                 <TextBlock Text="{Binding Path=FrameRate}" />
+                <TextBlock Text="Hands:" />
+                <TextBlock Text="{Binding Path=Hands}" />
             </StackPanel>
         </ScrollViewer>
     </Grid>
