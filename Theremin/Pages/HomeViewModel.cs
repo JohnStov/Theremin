@@ -11,27 +11,19 @@ namespace Theremin.Pages
         {
             var listener = ((App) (Application.Current)).Listener;
 
-            listener.Frames.Timestamp().Buffer(2).Subscribe(f =>
+            listener.Frames.Timestamp().Buffer(2).Select(f =>
             {
                 var span = f[1].Timestamp - f[0].Timestamp;
-                FrameRate = 1.0/span.TotalSeconds;
+                return 1.0/span.TotalSeconds;
+            }).ToProperty(this, x => x.FrameRate, out frameRate);
 
-                Hands = f[0].Value.Hands.Count;
-            });
+            listener.Frames.Select(f => f.Hands.Count).ToProperty(this, x => x.Hands, out hands);
         }
 
-        private double frameRate;
-        public double FrameRate 
-        { 
-            get { return frameRate; } 
-            private set { this.RaiseAndSetIfChanged(ref frameRate, value); } 
-        }
+        private readonly ObservableAsPropertyHelper<double> frameRate;
+        public double FrameRate { get { return frameRate.Value; } }
 
-        private int hands;
-        public int Hands
-        {
-            get { return hands; }
-            private set { this.RaiseAndSetIfChanged(ref hands, value); }
-        }
+        private readonly ObservableAsPropertyHelper<int> hands;
+        public int Hands { get { return hands.Value; } }
     }
 }
