@@ -13,6 +13,7 @@
                 <TextBlock Text="{Binding Path=FrameRate}" />
                 <TextBlock Text="Hands:" />
                 <TextBlock Text="{Binding Path=Hands}" />
+                <Button Content ="Reload" Command="{Binding Path=ReloadListener}" />
             </StackPanel>
         </ScrollViewer>
     </Grid>

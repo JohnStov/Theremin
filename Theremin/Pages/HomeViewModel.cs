@@ -11,6 +11,9 @@ namespace Theremin.Pages
         {
             var listener = ((App) (Application.Current)).Listener;
 
+            ReloadListener = new ReactiveCommand();
+            ReloadListener.Subscribe(_ => MessageBox.Show("Searching for LeapMotion"));
+
             listener.Frames.Timestamp().Buffer(2).Select(f =>
             {
                 var span = f[1].Timestamp - f[0].Timestamp;
@@ -25,5 +28,7 @@ namespace Theremin.Pages
 
         private readonly ObservableAsPropertyHelper<int> hands;
         public int Hands { get { return hands.Value; } }
+
+        public IReactiveCommand ReloadListener { get; private set; }
     }
 }
