@@ -3,9 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:theremin="clr-namespace:Theremin"
              d:DesignHeight="300"
              d:DesignWidth="300"
              mc:Ignorable="d">
+    <UserControl.Resources>
+        <theremin:BoolToVisibilityConverter x:Key="boolToVisConverter" />
+    </UserControl.Resources>
     <Grid Style="{StaticResource ContentRoot}">
         <ScrollViewer>
             <StackPanel MinWidth="200">
@@ -13,7 +17,7 @@
                 <TextBlock Text="{Binding Path=FrameRate}" />
                 <TextBlock Text="Hands:" />
                 <TextBlock Text="{Binding Path=Hands}" />
-                <Button Content ="Reload" Command="{Binding Path=ReloadListener}" />
+                <Button Content ="Reload" Command="{Binding Path=ReloadListener}" Visibility="{Binding IsLeapMotionConnected, Converter={StaticResource boolToVisConverter}}"/>
             </StackPanel>
         </ScrollViewer>
     </Grid>
