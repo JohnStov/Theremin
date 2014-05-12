@@ -9,11 +9,12 @@ namespace Theremin.Pages
     {
         public HomeViewModel()
         {
-            var listener = ((App) (Application.Current)).Listener;
+            var controller = LeapController.GetController();
 
             ReloadListener = new ReactiveCommand();
-            ReloadListener.Subscribe(_ => MessageBox.Show("Searching for LeapMotion"));
+            ReloadListener.Subscribe(_ => controller.Restart());
 
+            var listener = controller.Listener;
             IsLeapMotionDisconnected = !listener.LeapControllerAvailable;
 
             listener.Frames.Timestamp().Buffer(2).Select(f =>

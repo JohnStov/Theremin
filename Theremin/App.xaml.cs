@@ -8,15 +8,8 @@ namespace Theremin
     /// </summary>
     public partial class App : Application
     {
-        public ILeapListener Listener { get; private set; }
-
-        private readonly Controller controller;
-
         private App()
         {
-            var listener = new LeapListener();
-            controller = new Controller(listener);
-            Listener = listener;
         }
     }
 }

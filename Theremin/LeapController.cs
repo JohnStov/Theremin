@@ -3,9 +3,35 @@ using Leap;
 
 namespace Theremin
 {
-    public class LeapController : ILeapListener
+    public class LeapController : ILeapController
     {
-        public IObservable<Frame> Frames { get; private set; }
-        public bool LeapControllerAvailable { get; private set; }
+        private static LeapController leapController = null;
+
+        private Controller controller;
+
+        public static ILeapController GetController()
+        {
+            return leapController ?? (leapController = new LeapController());
+        }
+
+        private LeapController()
+        {
+            Restart();
+        }
+
+        public void Restart()
+        {
+            var listener = new LeapListener();
+            controller = new Controller(listener);
+            Listener = listener;
+        }
+
+        public ILeapListener Listener { get; private set; }
+    }
+
+    public interface ILeapController 
+    {
+        ILeapListener Listener { get; }
+        void Restart();
     }
 }
