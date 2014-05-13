@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
 using ReactiveUI;
@@ -11,11 +12,7 @@ namespace Theremin.Pages
         {
             var controller = LeapController.GetController();
 
-            ReloadListener = new ReactiveCommand();
-            ReloadListener.Subscribe(_ => controller.Restart());
-
             var listener = controller.Listener;
-            IsLeapMotionDisconnected = !listener.LeapControllerAvailable;
 
             listener.Frames.Timestamp().Buffer(2).Select(f =>
             {
@@ -23,23 +20,21 @@ namespace Theremin.Pages
                 return 1.0/span.TotalSeconds;
             }).ToProperty(this, x => x.FrameRate, out frameRate);
 
-            listener.Frames.Select(f => f.Hands.Count).ToProperty(this, x => x.Hands, out hands);
+            listener.Frames.Select(f => f.Hands.Any() ? f.Hands[0].PalmPosition.y : 0.0f)
+                .ToProperty(this, x => x.HandHeight, out handHeight);
+
+            listener.Connected.Select(f => f ? "Connected" : "Disconnected")
+                .ToProperty(this, x => x.Connected, out connected, "Disconnected");
         }
 
         private readonly ObservableAsPropertyHelper<double> frameRate;
         public double FrameRate { get { return frameRate.Value; } }
 
-        private readonly ObservableAsPropertyHelper<int> hands;
-        public int Hands { get { return hands.Value; } }
+        private readonly ObservableAsPropertyHelper<float> handHeight;
+        public float HandHeight { get { return handHeight.Value; } }
 
-        private bool isLeapMotionDisconnected;
+        private readonly ObservableAsPropertyHelper<string> connected;
+        public string Connected { get { return connected.Value; } }
 
-        public bool IsLeapMotionDisconnected
-        {
-            get { return isLeapMotionDisconnected; }
-            protected set { this.RaiseAndSetIfChanged(ref isLeapMotionDisconnected, value); }
-        }
-
-        public IReactiveCommand ReloadListener { get; private set; }
     }
 }

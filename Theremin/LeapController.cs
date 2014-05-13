@@ -16,11 +16,6 @@ namespace Theremin
 
         private LeapController()
         {
-            Restart();
-        }
-
-        public void Restart()
-        {
             var listener = new LeapListener();
             controller = new Controller(listener);
             Listener = listener;
@@ -32,6 +27,5 @@ namespace Theremin
     public interface ILeapController 
     {
         ILeapListener Listener { get; }
-        void Restart();
     }
 }
