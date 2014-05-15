@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Windows.Controls.Primitives;
+using System.Reactive;
 
 namespace Theremin
 {
@@ -10,13 +9,22 @@ namespace Theremin
         public IEnumerable<double> Data { get; private set; }
 
         private double delta;
-        private double frequency = 440;
-        private double phase = 0.0;
+        private readonly int sampleRate;
+        private double phase;
+
+        public IObserver<double> Frequency { get; private set; }
 
         public Oscillator(int sampleRate, Func<double, double> generator)
         {
-            delta = 2.0*Math.PI*frequency/sampleRate;
+            this.sampleRate = sampleRate;
             Data = Samples(generator);
+
+            Frequency = new AnonymousObserver<double>(SetFrequency);
+        }
+
+        private void SetFrequency(double frequency)
+        {
+            delta = 2.0 * Math.PI * frequency / sampleRate;
         }
 
         private IEnumerable<double> Samples(Func<double, double> generator)

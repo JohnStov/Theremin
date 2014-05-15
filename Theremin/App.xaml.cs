@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Windows;
 using Leap;
 using NAudio.CoreAudioApi;
@@ -14,10 +15,15 @@ namespace Theremin
     {
         private App()
         {
-//            var waveOut = new WaveOut(WaveCallbackInfo.NewWindow());
             var waveOut = new DirectSoundOut(60);
+
+            var osc = new Oscillator(44100, Math.Sin);
+
+            var controller = LeapController.GetController();
+            var listener = controller.Listener;
+            listener.Frames.Select(f => (f.Hands.Count > 0) ? f.Hands[0].PalmPosition.y : 0.0).Subscribe(osc.Frequency);
             
-            waveOut.Init(new StreamProvider(new Oscillator(44100, Math.Sin)));
+            waveOut.Init(new StreamProvider(osc));
             waveOut.Play();
         }
     }
