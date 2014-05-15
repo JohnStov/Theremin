@@ -13,10 +13,16 @@ namespace Theremin
 
     class LeapListener : Listener, ILeapListener
     {
-        private readonly Subject<Frame> frameSubject = new Subject<Frame>();
-        private readonly Subject<bool> connectedSubject = new Subject<bool>();
-        public IObservable<Frame> Frames { get { return frameSubject; } }
-        public IObservable<bool> Connected { get { return connectedSubject; } }
+        private readonly ISubject<Frame> frameSubject = new Subject<Frame>();
+        private readonly ISubject<bool> connectedSubject = new BehaviorSubject<bool>(false);
+        public IObservable<Frame> Frames { get; private set; }
+        public IObservable<bool> Connected { get; private set; }
+
+        public LeapListener()
+        {
+            Frames = frameSubject;
+            Connected = connectedSubject;
+        }
 
         public override void OnInit(Controller controller)
         {

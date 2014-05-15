@@ -24,7 +24,7 @@ namespace Theremin.Pages
                 .ToProperty(this, x => x.HandHeight, out handHeight);
 
             listener.Connected.Select(f => f ? "Connected" : "Disconnected")
-                .ToProperty(this, x => x.Connected, out connected, "Disconnected");
+                .ToProperty(this, x => x.Connected, out connected);
         }
 
         private readonly ObservableAsPropertyHelper<double> frameRate;
